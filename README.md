@@ -1,82 +1,69 @@
-# 
+# Task Management System (Nx Monorepo)
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+<a alt="Nx logo" href="http://localhost:4200" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+## 📄 Setup Instructions
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Prerequisites
 
-## Finish your CI setup
+You do **not** need Node.js or Angular CLI installed locally if you use Docker as described below.
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/MtHK0bm7Qr)
+For advanced/manual development (outside Docker), ensure you have:
 
+- **Node.js:** v18.x or higher
+- **Nx CLI:** v18.x or higher
+- **Angular CLI:** v16.x or higher
+- **Docker:** v24.x or higher
+- **Docker Compose:** v2.x or higher
 
-## Run tasks
-
-To run the dev server for your app, use:
-
-```sh
-npx nx serve dashboard
+Check your versions:
+```bash
+node -v
+nx --version
+ng --version
+docker -v
+docker compose version
 ```
 
-To create a production bundle:
+> **Note:** Docker images will install and use the correct Node/Nx/Angular versions automatically.
 
-```sh
-npx nx build dashboard
+### Environment Variables
+Create `.env` files in the project root and/or in `apps/api/` and `apps/dashboard/` as needed. Example:
+```env
+# apps/api/.env
+JWT_SECRET=your-secret
+DB_HOST=your-db-host
+DB_USER=your-db-user
+DB_PASS=your-db-pass
 ```
 
-To see all available targets to run for a project, run:
-
-```sh
-npx nx show project dashboard
+### Running the Apps
+Start both backend (NestJS) and frontend (Angular) with Docker Compose:
+```bash
+docker-compose up --build
 ```
-
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/angular:app demo
-```
-
-To generate a new library, use:
-
-```sh
-npx nx g @nx/angular:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- **Frontend:** [http://localhost:4200/](http://localhost:4200/)
+- **Backend API:** [http://localhost:3001](http://localhost:3001)
 
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## 🏗️ Architecture Overview
 
-## Install Nx Console
+### NX Monorepo Layout
+- `apps/` contains:
+  - `dashboard/` (Angular frontend)
+  - `api/` (NestJS backend)
+- `libs/` contains shared code (interfaces, utilities, etc.)
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+Nx helps manage dependencies, code sharing, and consistent tooling.
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Shared Libraries
+- Common interfaces and utilities are in `libs/` and imported by both apps.
 
-## Useful links
+## 🚀 Production Deployment
 
-Learn more:
+For production, you may use nginx as a reverse proxy:
+- Serve the Angular build (`dist/apps/dashboard`) as static files.
+- Proxy `/api` requests to the NestJS backend.
+- Benefits: Centralized routing, SSL, caching.
 
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+For development, direct port mapping via Docker Compose is sufficient.

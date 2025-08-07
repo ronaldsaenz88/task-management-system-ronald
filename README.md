@@ -8,24 +8,34 @@
 
 You do **not** need Node.js or Angular CLI installed locally if you use Docker as described below.
 
-For advanced/manual development (outside Docker), ensure you have:
+Ensure you have:
 
-- **Node.js:** v18.x or higher
-- **Nx CLI:** v18.x or higher
-- **Angular CLI:** v16.x or higher
 - **Docker:** v24.x or higher
 - **Docker Compose:** v2.x or higher
 
-Check your versions:
+For advanced/manual development (outside Docker), ensure you have:
+
+- **Node.js:** v24.x or higher
+- **Nx CLI:** v21.x or higher
+- **NestJS:** v11.x or higher
+- **Angular CLI:** v20.x or higher
+- **Tailwind CSS:** 4.1.x or higher
+- **Jest:** 29.7.x or higher
+
+Check your versions with:
+
 ```bash
+docker -v
+docker compose version
 node -v
 nx --version
 ng --version
-docker -v
-docker compose version
+nest --version
+npx tailwindcss --version
+npx jest --version
 ```
 
-> **Note:** Docker images will install and use the correct Node/Nx/Angular versions automatically.
+> **Note:** If using Docker for all development, these will be handled automatically inside containers.
 
 ### Environment Variables
 Create `.env` files in the project root and/or in `apps/api/` and `apps/dashboard/` as needed. Example:
@@ -47,6 +57,15 @@ docker-compose up --build
 
 
 ## 🏗️ Architecture Overview
+
+## Technology Stack
+
+- **Angular** (frontend)
+- **NestJS** (backend, REST API)
+- **Nx Monorepo** (workspace orchestration)
+- **Tailwind CSS** (styling for frontend)
+- **Jest** (unit testing)
+- **Docker & Docker Compose** (containerization)
 
 ### NX Monorepo Layout
 - `apps/` contains:

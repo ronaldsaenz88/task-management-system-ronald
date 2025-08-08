@@ -1,0 +1,86 @@
+<div class="p-4 max-w-7xl mx-auto">
+  <!-- Board Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+    <h1 class="text-2xl font-bold text-gray-800">Task Board</h1>
+    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+      <button 
+        (click)="listTasks()" 
+        class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition font-semibold w-full sm:w-auto"
+      >
+        Tasks List
+      </button>
+      <button 
+        (click)="addTask()" 
+        class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition font-semibold w-full sm:w-auto"
+      >
+        + Add Task
+      </button>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-4 mb-4 sm:flex-row sm:flex-wrap">
+    <input
+      type="text"
+      placeholder="Search tasks…"
+      class="border rounded px-2 py-1 w-full sm:w-auto"
+      [(ngModel)]="filterText"
+    />
+    <select class="border rounded px-2 py-1 w-full sm:w-auto" [(ngModel)]="filterCategory">
+      <option value="">All Categories</option>
+      <option *ngFor="let cat of categories">{{cat}}</option>
+    </select>
+  </div>
+  
+  <!-- Tasks Board -->
+  <div class="flex flex-col md:flex-row gap-4">
+    <div *ngFor="let status of statuses" class="flex-1">
+      <div class="mb-2 flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full"
+          [ngClass]="{
+            'bg-yellow-400': status === 'todo',
+            'bg-blue-400': status === 'inprogress',
+            'bg-green-500': status === 'done',
+            'bg-gray-400': status === 'archived'
+          }"></span>
+        <span class="font-semibold text-lg capitalize">
+          {{ status === 'todo' ? 'To Do' : status === 'inprogress' ? 'In Progress' : status === 'archived' ? 'Archived' : 'Done' }}
+        </span>
+      </div>
+      <div
+        cdkDropList
+        [cdkDropListData]="getTasksByStatus(status)"
+        class="bg-gray-100 min-h-[300px] rounded-xl p-3 space-y-3 shadow-inner"
+        (cdkDropListDropped)="drop($event, status)">
+        <div
+          *ngFor="let task of getTasksByStatus(status)"
+          cdkDrag
+          class="bg-white rounded-lg shadow flex flex-col gap-2 p-3 cursor-move group transition hover:shadow-lg border border-gray-200 transition-all duration-200"
+        >
+          <div class="flex justify-between items-center">
+            <div class="font-bold text-gray-800 truncate">{{ task.title }}</div>
+            <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition">
+              <button (click)="editTask(task)" class="text-blue-500 hover:text-blue-700" title="Edit">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2 2 0 012.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13zm0 0V17h4"></path>
+                </svg>
+              </button>
+              <button (click)="deleteTask(task)" class="text-red-500 hover:text-red-700" title="Delete">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="flex justify-between items-center text-xs text-gray-500">
+            <span class="bg-zinc-100 px-2 py-0.5 rounded">{{ task.category }}</span>
+            <span>{{ task.dueDate | date:'MMM d, yyyy' }}</span>
+          </div>
+          <div class="text-gray-700 text-sm">{{ task.description }}</div>
+        </div>
+        <div *ngIf="getTasksByStatus(status).length === 0" class="text-center text-gray-400 py-8 italic">
+          No tasks in this column
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

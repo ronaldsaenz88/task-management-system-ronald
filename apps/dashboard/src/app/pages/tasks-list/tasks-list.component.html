@@ -1,0 +1,97 @@
+<div class="p-4 max-w-7xl mx-auto">
+  <!-- Board Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+    <h1 class="text-2xl font-bold text-gray-800">Task List</h1>
+    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+      <button 
+        (click)="showTaskBoard()" 
+        class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition font-semibold w-full sm:w-auto"
+      >
+        Tasks Board
+      </button>
+      <button 
+        (click)="addTask()" 
+        class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition font-semibold w-full sm:w-auto"
+      >
+        + Add Task
+      </button>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-4 mb-4 sm:flex-row sm:flex-wrap">
+    <input
+      type="text"
+      placeholder="Search tasks…"
+      class="border rounded px-2 py-1 w-full sm:w-auto"
+      [(ngModel)]="filterText"
+    />
+    <select class="border rounded px-2 py-1 w-full sm:w-auto"[(ngModel)]="filterCategory">
+      <option value="">All Categories</option>
+      <option *ngFor="let cat of categories">{{cat}}</option>
+    </select>
+    <select class="border rounded px-2 py-1 w-full sm:w-auto" [(ngModel)]="filterStatus">
+      <option value="">All Statuses</option>
+      <option *ngFor="let stat of statuses">{{stat}}</option>
+    </select>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-zinc-200 rounded shadow">
+      <thead class="bg-zinc-50">
+        <tr>
+          <th class="p-2 cursor-pointer" (click)="setSort('title')">
+            Title
+            <span *ngIf="sortColumn==='title'">{{sortAsc ? '▲' : '▼'}}</span>
+          </th>
+          <th class="p-2 cursor-pointer" (click)="setSort('category')">
+            Category
+            <span *ngIf="sortColumn==='category'">{{sortAsc ? '▲' : '▼'}}</span>
+          </th>
+          <th class="p-2 cursor-pointer" (click)="setSort('status')">
+            Status
+            <span *ngIf="sortColumn==='status'">{{sortAsc ? '▲' : '▼'}}</span>
+          </th>
+          <th class="p-2 cursor-pointer" (click)="setSort('dueDate')">
+            Due Date
+            <span *ngIf="sortColumn==='dueDate'">{{sortAsc ? '▲' : '▼'}}</span>
+          </th>
+          <th class="p-2">Description</th>
+          <th class="p-4">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of filteredTasks" class="border-t last:border-b hover:bg-zinc-50 transition">
+          <td class="p-2 font-semibold">{{ task.title }}</td>
+          <td class="p-2">{{ task.category }}</td>
+          <td class="p-2">
+            <span class="px-2 py-0.5 rounded text-xs font-medium"
+                  [ngClass]="{
+                    'bg-blue-100 text-blue-700': task.status === 'inprogress',
+                    'bg-green-100 text-green-700': task.status === 'done',
+                    'bg-yellow-100 text-yellow-700': task.status === 'todo'
+                  }">
+              {{ task.status }}
+            </span>
+          </td>
+          <td class="p-2">{{ task.dueDate }}</td>
+          <td class="p-2 text-zinc-600">{{ task.description }}</td>
+          <td class="p-4 text-center text-zinc-400">
+            <button (click)="editTask(task)" class="text-blue-500 hover:text-blue-700" title="Edit">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2 2 0 012.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13zm0 0V17h4"></path>
+              </svg>
+            </button>
+            <button (click)="deleteTask(task)" class="text-red-500 hover:text-red-700" title="Delete">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredTasks.length === 0">
+          <td colspan="5" class="p-4 text-center text-zinc-400">No tasks found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

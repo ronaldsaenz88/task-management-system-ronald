@@ -67,13 +67,3 @@ export class TaskController {
     return { deleted: true };
   }
 }
-
-// import { Roles } from '@yourorg/auth';
-// import { Role } from '@yourorg/auth';
-// import { UseGuards } from '@nestjs/common';
-// import { JwtAuthGuard } from '../auth/jwt-auth.guard'; // your JWT guard
-// import { RolesGuard } from '@yourorg/auth';
-
-// @UseGuards(JwtAuthGuard, RolesGuard)
-// @Roles(Role.Admin, Role.Manager)
-// @Get()

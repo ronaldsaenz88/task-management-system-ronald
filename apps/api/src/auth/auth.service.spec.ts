@@ -2,12 +2,18 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
+
+jest.mock('bcryptjs', () => ({
+  compareSync: jest.fn(),
+}));
 import * as bcrypt from 'bcryptjs';
+
 
 describe('AuthService', () => {
   let service: AuthService;
   let userService: UserService;
   let jwtService: JwtService;
+
 
   const mockUser = {
     id: 1,
@@ -43,7 +49,7 @@ describe('AuthService', () => {
   describe('validateUser', () => {
     it('should return user object if credentials are valid', async () => {
       mockUserService.findOne.mockResolvedValue({ ...mockUser });
-      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
+      (bcrypt.compareSync as jest.Mock).mockReturnValueOnce(true);
 
       const result = await service.validateUser('test@example.com', 'password');
       expect(result).toEqual({ id: '1', email: 'test@example.com' });
@@ -61,7 +67,7 @@ describe('AuthService', () => {
 
     it('should return null if password does not match', async () => {
       mockUserService.findOne.mockResolvedValue({ ...mockUser });
-      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(false);
+      (bcrypt.compareSync as jest.Mock).mockReturnValueOnce(false);
 
       const result = await service.validateUser('test@example.com', 'wrongpassword');
       expect(result).toBeNull();

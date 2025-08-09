@@ -55,12 +55,15 @@ describe('TaskService', () => {
 
   describe('findOne', () => {
     it('should return a task by id with relations', async () => {
-      await expect(service.findOne(1)).resolves.toEqual(mockTask);
+      const result = await service.findOne(1);
+      expect(result).toEqual(mockTask);
+
       expect(repo.findOne).toHaveBeenCalledWith({ where: { id: 1 }, relations: ['createdBy', 'organization'] });
     });
 
     it('should return null if task not found', async () => {
-      await expect(service.findOne(2)).resolves.toBeNull();
+      const result = await service.findOne(2);
+      expect(result).toBeNull();
       expect(repo.findOne).toHaveBeenCalledWith({ where: { id: 2 }, relations: ['createdBy', 'organization'] });
     });
   });

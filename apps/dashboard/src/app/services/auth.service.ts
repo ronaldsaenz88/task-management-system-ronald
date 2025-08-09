@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
@@ -7,8 +7,10 @@ export class AuthService {
   private baseURL = 'http://localhost:3001';
   private apiLoginUrl = `${this.baseURL}/api/auth/login`;
 
-  constructor(private http: HttpClient) {}
+  // Constructor using inject (Angular 16+)
+  private http = inject(HttpClient);
 
+  // Login method to authenticate user and store JWT token
   login(email: string, password: string): Observable<{ access_token: string }> {
     return this.http.post<{ access_token: string }>(this.apiLoginUrl, { email, password }).pipe(
       tap(res => {
@@ -18,10 +20,12 @@ export class AuthService {
     );
   }
 
+  // Logout method to clear the stored JWT token
   logout() {
     localStorage.removeItem('jwt');
   }
 
+  // Method to check if user is authenticated
   getToken(): string | null {
     return localStorage.getItem('jwt');
   }

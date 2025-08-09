@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
@@ -9,14 +9,12 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  // Constructor using inject (Angular 16+)
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   logout() {
     this.authService.logout(); // just call the method
-    console.log('Logout successful');
     this.router.navigate(['/login']);
   }
 }

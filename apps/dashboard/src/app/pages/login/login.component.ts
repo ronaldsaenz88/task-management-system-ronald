@@ -1,5 +1,5 @@
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,22 +13,19 @@ import { ActivatedRoute, Router } from '@angular/router';
   imports: [CommonModule, FormsModule, ReactiveFormsModule]
 })
 export class LoginComponent {
-
   email = '';
   password = '';
   errorMsg = '';
-  loginForm!: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
-  }
+  // Constructor using inject (Angular 16+)
+  private authService = inject(AuthService);
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+
+  loginForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required]
+  });
 
   login() {
     // Check if the form is valid
@@ -39,14 +36,12 @@ export class LoginComponent {
 
     const { email, password } = this.loginForm.value;
 
-    this.authService.login(email, password).subscribe({
+    this.authService.login(email ?? '', password ?? '').subscribe({
       next: () => {
         // Redirect or reload after successful login
-        console.log('Login successful');
         this.router.navigate(['/tasks']);
       },
       error: () => {
-        console.error('Login failed');
         this.errorMsg = 'Login failed. Check your credentials.';
       }
     });

@@ -54,7 +54,7 @@
         <div
           *ngFor="let task of getTasksByStatus(status)"
           cdkDrag
-          class="bg-white rounded-lg shadow flex flex-col gap-2 p-3 cursor-move group transition hover:shadow-lg border border-gray-200 transition-all duration-200"
+          class="bg-white rounded-lg shadow flex flex-col gap-2 p-3 cursor-move group transition hover:shadow-lg border border-gray-200 duration-200"
         >
           <div class="flex justify-between items-center">
             <div class="font-bold text-gray-800 truncate">{{ task.title }}</div>

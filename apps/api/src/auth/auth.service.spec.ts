@@ -52,7 +52,7 @@ describe('AuthService', () => {
       (bcrypt.compareSync as jest.Mock).mockReturnValueOnce(true);
 
       const result = await service.validateUser('test@example.com', 'password');
-      expect(result).toEqual({ id: '1', email: 'test@example.com' });
+      expect(result).toEqual({ id: '1', email: 'test@example.com', roles: ['user'], orgId: 'org1' });
       expect(mockUserService.findOne).toHaveBeenCalledWith('test@example.com');
       expect(bcrypt.compareSync).toHaveBeenCalledWith('password', 'hashedpassword');
     });

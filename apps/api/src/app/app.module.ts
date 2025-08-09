@@ -10,6 +10,7 @@ import { Role } from '@libs/data/src/entities/role';
 import { Task } from '@libs/data/src/entities/task';
 // Import modules
 import { TaskModule } from '@apps/api/src/task/task.module';
+import { AuthModule } from '@apps/api/src/auth/auth.module';
 
 
 @Module({
@@ -26,6 +27,7 @@ import { TaskModule } from '@apps/api/src/task/task.module';
     }),
     // Other modules...
     TaskModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

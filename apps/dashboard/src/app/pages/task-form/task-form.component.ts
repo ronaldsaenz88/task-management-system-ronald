@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TASK_CATEGORIES, TASK_STATUSES } from '../../constants/tasks';
 import { CommonModule } from '@angular/common';
@@ -20,13 +20,12 @@ export class TaskFormComponent implements OnInit {
   isEditMode = false;
   categories = TASK_CATEGORIES;
   statuses = TASK_STATUSES;
-
-  constructor(
-    private fb: FormBuilder,
-    private tasksService: TasksService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  
+  // Constructor using inject (Angular 16+)
+  private fb = inject(FormBuilder);
+  private tasksService = inject(TasksService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   // Always initialize the task object for ngModel to work!
   defaultTask = {

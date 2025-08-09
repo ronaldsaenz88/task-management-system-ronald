@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { DragDropModule, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { TASK_CATEGORIES, TASK_STATUSES } from '../../constants/tasks';
 import { CommonModule } from '@angular/common';
@@ -23,7 +23,9 @@ export class TasksBoardComponent implements OnInit {
   categories = TASK_CATEGORIES;
   statuses = TASK_STATUSES;
 
-  constructor(private tasksService: TasksService, private router: Router) {}
+  // Constructor using inject (Angular 16+)
+  private tasksService = inject(TasksService);
+  private router = inject(Router);
 
   ngOnInit() {
     this.tasksService.getTasks().subscribe(tasks => 

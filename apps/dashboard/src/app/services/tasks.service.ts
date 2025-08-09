@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Task } from '../models/task.model';
@@ -8,7 +8,6 @@ import { Task } from '../models/task.model';
 export class TasksService {
   private apiTaskUrl = 'http://localhost:3001/api/tasks/';
 
-
   private tasks: Task[] = [
     { id: 1, title: 'Initial Task', category: 'Work', status: 'todo', dueDate: '2025-08-10', description: 'Demo task' },
     { id: 2, title: 'Design homepage', description: 'Design the main landing page', category: 'UI', status: 'inprogress', dueDate: '2025-08-10' },
@@ -17,7 +16,8 @@ export class TasksService {
     // ...more demo data
   ];
 
-  constructor(private http: HttpClient) {}
+  // Constructor using inject (Angular 16+)
+  private http = inject(HttpClient);
 
   getHardcodeTasks(): Observable<Task[]> {
     return of(this.tasks);

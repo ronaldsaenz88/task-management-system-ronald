@@ -30,7 +30,6 @@ export class TasksBoardComponent implements OnInit {
   ngOnInit() {
     this.tasksService.getTasks().subscribe(tasks => 
       {
-        console.log('Tasks fetched:', tasks);
         this.tasks = tasks
       }
     );

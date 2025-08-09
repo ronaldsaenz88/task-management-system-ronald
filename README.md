@@ -92,7 +92,7 @@ There are the entities:
 
 ### ERD Diagram
 
-![ERD](./docs/ERD.png)  
+![ERD](./docs/taskmanager-ERD.png)
 
 
 ## Access Control Implementation
